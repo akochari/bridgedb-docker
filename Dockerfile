@@ -2,8 +2,6 @@ FROM openjdk:11-jdk
 
 MAINTAINER BiGCaT
 
-#ENV PORT 8080
-
 RUN apt-get update
 RUN apt-get install jq -y
 
@@ -18,8 +16,16 @@ RUN /setup.sh
 COPY startup.sh /opt/bridgedb/bridgedb/
 RUN chmod +x /opt/bridgedb/bridgedb/startup.sh
 
-EXPOSE 8183 
-#8080
+COPY start-script.sh ./start-script.sh
+RUN chmod +x ./start-script.sh
 
-ENTRYPOINT /opt/bridgedb/bridgedb/startup.sh -f /opt/bridgedb-databases/gdb.config
+ENV USER=username
+ENV HOME=/home/$USER
+RUN useradd -m -u 1000 $USER
+RUN chown $USER /opt/bridgedb/bridgedb/
+USER $USER
+
+EXPOSE 8183 
+
+ENTRYPOINT ["./start-script.sh"]
 CMD ["-D", "FOREGROUND"]

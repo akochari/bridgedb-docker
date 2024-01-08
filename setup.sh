@@ -48,6 +48,7 @@ cat other.json.config >> gdb.config
 
 grep -v "Ec_Derby_Ensembl_91.bridge" gdb.config > tmpfile && mv tmpfile gdb.config
 grep -v "Mx_Derby_Ensembl_85.bridge" gdb.config > tmpfile && mv tmpfile gdb.config
+grep -v "metabolites_20220707.bridge" gdb.config > tmpfile && mv tmpfile gdb.config
 
 jq -r '.mappingFiles | .[] | select(.tested) | select(.tested|.[]|test(.|"WS")) | "\(.file)=\(.downloadURL)"' gene.json >> files.txt
 jq -r '.mappingFiles | .[] | select(.tested) | select(.tested|.[]|test(.|"WS")) | "\(.file)=\(.downloadURL)"' corona.json >> files.txt
@@ -55,6 +56,7 @@ jq -r '.mappingFiles | .[] | select(.tested) | select(.tested|.[]|test(.|"WS")) 
 
 grep -v "Ec_Derby_Ensembl_91.bridge" files.txt > tmpfile && mv tmpfile files.txt
 grep -v "Mx_Derby_Ensembl_85.bridge" files.txt > tmpfile && mv tmpfile files.txt
+grep -v "metabolites_20220707.bridge" files.txt > tmpfile && mv tmpfile files.txt
 
 
 for FILE in $(cat files.txt)
@@ -67,9 +69,7 @@ done
 #Remove files that do not work
 rm Ec_Derby_Ensembl_91.bridge
 rm Mx_Derby_Ensembl_85.bridge
+rm metabolites_20220707.bridge
 
 sed -i -e 's/\t/\t\/opt\/bridgedb-databases\//g' gdb.config
 cp gdb.config /opt/bridgedb/bridgedb/
-
-
-
